@@ -3,28 +3,19 @@ import { useState, useMemo, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import NavBar from "../components/NavBar";
-import Footer from "../components/Footer";
-import { Typography, Box, Button } from "@mui/material";
-import Link from "next/link";
+import VagasList from "../../components/VagasList";
+import NavBar from "../../components/NavBar";
+import Footer from "../../components/Footer";
 
-export default function HomePage() {
+export default function VagasPage() {
   const [mode, setMode] = useState<"light" | "dark">("light");
-  const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
-    // Só roda no cliente
     const stored = localStorage.getItem("themeMode") as "light" | "dark";
     if (stored) setMode(stored);
-    setMounted(true);
   }, []);
-
   useEffect(() => {
-    if (mounted) {
-      localStorage.setItem("themeMode", mode);
-    }
-  }, [mode, mounted]);
-
+    localStorage.setItem("themeMode", mode);
+  }, [mode]);
   const theme = useMemo(
     () =>
       createTheme({
@@ -47,30 +38,13 @@ export default function HomePage() {
   );
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Só renderiza após montar no cliente
-  if (!mounted) return null;
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <NavBar mode={mode} setMode={setMode} isMobile={isMobile} />
-      <Box textAlign="center" mt={8}>
-        <Typography variant="h3" color="primary" fontWeight={700} gutterBottom>
-          Bem-vindo ao Empregos Maranhão!
-        </Typography>
-        <Typography variant="h6" color="text.secondary" mb={4}>
-          Encontre as melhores oportunidades de trabalho no Maranhão.
-        </Typography>
-        <Button
-          component={Link}
-          href="/vagas"
-          variant="contained"
-          color="primary"
-          size="large"
-        >
-          Ver Vagas
-        </Button>
-      </Box>
+      <main>
+        <VagasList />
+      </main>
       <Footer />
     </ThemeProvider>
   );
