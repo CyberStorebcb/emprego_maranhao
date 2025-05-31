@@ -4,7 +4,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import NavBar from "../../components/NavBar";
-import Footer from "../../components/Footer";
 import { Typography, Box } from "@mui/material";
 
 export default function SobrePage() {
@@ -49,7 +48,6 @@ export default function SobrePage() {
           trabalho na região.
         </Typography>
       </Box>
-      <Footer />
     </ThemeProvider>
   );
 }

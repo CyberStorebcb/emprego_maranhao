@@ -1,20 +1,35 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import VagasList from "../../components/VagasList";
-import NavBar from "../../components/NavBar";
+import { Geist, Geist_Mono } from "next/font/google";
 
-export default function VagasPage() {
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export default function ThemeRegistry({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState<"light" | "dark">("light");
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     const stored = localStorage.getItem("themeMode") as "light" | "dark";
     if (stored) setMode(stored);
+    setMounted(true);
   }, []);
+
   useEffect(() => {
-    localStorage.setItem("themeMode", mode);
-  }, [mode]);
+    if (mounted) {
+      localStorage.setItem("themeMode", mode);
+    }
+  }, [mode, mounted]);
+
   const theme = useMemo(
     () =>
       createTheme({
@@ -32,18 +47,21 @@ export default function VagasPage() {
                 text: { primary: "#222", secondary: "#666" },
               }),
         },
+        shape: { borderRadius: 12 },
+        typography: {
+          fontFamily: `${geistSans.style.fontFamily}, ${geistMono.style.fontFamily}, Arial, sans-serif`,
+        },
       }),
     [mode]
   );
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  if (!mounted) return null;
+
+  // Passe setMode/mode para NavBar se quiser alternar o tema via botão
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <NavBar mode={mode} setMode={setMode} isMobile={isMobile} />
-      <main>
-        <VagasList />
-      </main>
+      {children}
     </ThemeProvider>
   );
 }

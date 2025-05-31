@@ -4,7 +4,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import NavBar from "../../components/NavBar";
-import Footer from "../../components/Footer";
 import { Typography, Box, TextField, Button } from "@mui/material";
 
 export default function ContatoPage() {
@@ -33,35 +32,53 @@ export default function ContatoPage() {
       }),
     [mode]
   );
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <NavBar mode={mode} setMode={setMode} isMobile={isMobile} />
-      <Box maxWidth="sm" mx="auto" mt={6} px={2}>
-        <Typography variant="h4" color="primary" gutterBottom>
-          Contato
-        </Typography>
-        <Typography variant="body1" color="text.secondary" mb={2}>
-          Fale conosco para dúvidas, sugestões ou parcerias.
-        </Typography>
-        <form>
-          <TextField label="Seu nome" fullWidth margin="normal" />
-          <TextField label="E-mail" type="email" fullWidth margin="normal" />
-          <TextField
-            label="Mensagem"
-            multiline
-            rows={4}
-            fullWidth
-            margin="normal"
-          />
-          <Button variant="contained" color="primary" sx={{ mt: 2 }}>
-            Enviar
-          </Button>
-        </form>
-      </Box>
-      <Footer />
-    </ThemeProvider>
-  );
-}
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <NavBar mode={mode} setMode={setMode} isMobile={isMobile} />
+        <Box
+          sx={{
+            minHeight: "80vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            bgcolor: "background.default",
+            color: "text.primary",
+            px: 2,
+          }}
+        >
+          <Typography variant={isMobile ? "h5" : "h4"} gutterBottom>
+            Entre em contato
+          </Typography>
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              width: isMobile ? "100%" : 400,
+              mt: 2,
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField label="Nome" variant="outlined" fullWidth />
+            <TextField label="Email" variant="outlined" fullWidth />
+            <TextField
+              label="Mensagem"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={4}
+            />
+            <Button variant="contained" color="primary">
+              Enviar
+            </Button>
+          </Box>
+        </Box>
+      </ThemeProvider>
+    );
+  }
