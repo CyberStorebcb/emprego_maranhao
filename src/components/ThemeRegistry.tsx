@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, createContext, useContext } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -13,6 +13,20 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+type ThemeModeContextType = {
+  mode: "light" | "dark";
+  setMode: React.Dispatch<React.SetStateAction<"light" | "dark">>;
+};
+
+const ThemeModeContext = createContext<ThemeModeContextType>({
+  mode: "light",
+  setMode: () => {},
+});
+
+export function useThemeMode() {
+  return useContext(ThemeModeContext);
+}
 
 export default function ThemeRegistry({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState<"light" | "dark">("light");
@@ -57,11 +71,12 @@ export default function ThemeRegistry({ children }: { children: React.ReactNode 
 
   if (!mounted) return null;
 
-  // Passe setMode/mode para NavBar se quiser alternar o tema via botão
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {children}
-    </ThemeProvider>
+    <ThemeModeContext.Provider value={{ mode, setMode }}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
+    </ThemeModeContext.Provider>
   );
 }
