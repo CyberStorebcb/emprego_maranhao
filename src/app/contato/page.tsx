@@ -1,43 +1,33 @@
 "use client";
-import { useState, useMemo } from "react";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
+import { useThemeMode } from "../../components/ThemeRegistry";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import NavBar from "../../components/NavBar";
+import Footer from "../../components/Footer";
 import { Typography, Box, TextField, Button } from "@mui/material";
 
+const backgroundUrl =
+  "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
 export default function ContatoPage() {
-  const [mode, setMode] = useState<"light" | "dark">(
-    typeof window !== "undefined"
-      ? (localStorage.getItem("themeMode") as "light" | "dark") || "light"
-      : "light"
-  );
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-          primary: { main: "#1976d2" },
-          secondary: { main: "#f50057" },
-          ...(mode === "dark"
-            ? {
-                background: { default: "#181a1b", paper: "#23272a" },
-                text: { primary: "#f5f5f5", secondary: "#b0b3b8" },
-              }
-            : {
-                background: { default: "#f5f5f5", paper: "#fff" },
-                text: { primary: "#222", secondary: "#666" },
-              }),
-        },
-      }),
-    [mode]
-  );
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <NavBar mode={mode} setMode={setMode} isMobile={isMobile} />
+  const { mode, setMode } = useThemeMode();
+  const isMobile = useMediaQuery("(max-width:600px)");
+
+  return (
+    <>
+      <NavBar mode={mode} setMode={setMode} isMobile={isMobile} />
+      <Box
+        sx={{
+          minHeight: "100vh",
+          width: "100vw",
+          backgroundImage: `linear-gradient(rgba(24,26,27,0.5),rgba(24,26,27,0.5)), url(${backgroundUrl})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          transition: "background 0.5s",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Box
           sx={{
             minHeight: "80vh",
@@ -79,6 +69,8 @@ export default function ContatoPage() {
             </Button>
           </Box>
         </Box>
-      </ThemeProvider>
-    );
-  }
+        <Footer />
+      </Box>
+    </>
+  );
+}
