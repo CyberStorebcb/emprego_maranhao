@@ -2,11 +2,7 @@
 import { useThemeMode } from "../../components/ThemeRegistry";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import NavBar from "../../components/NavBar";
-import Footer from "../../components/Footer";
-import { Typography, Box, TextField, Button } from "@mui/material";
-
-const backgroundUrl =
-  "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+import { Typography, Box, TextField, Button, Paper } from "@mui/material";
 
 export default function ContatoPage() {
   const { mode, setMode } = useThemeMode();
@@ -19,28 +15,31 @@ export default function ContatoPage() {
         sx={{
           minHeight: "100vh",
           width: "100vw",
-          backgroundImage: `linear-gradient(rgba(24,26,27,0.5),rgba(24,26,27,0.5)), url(${backgroundUrl})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          transition: "background 0.5s",
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "background.default",
+          color: "text.primary",
+          px: 2,
         }}
       >
-        <Box
+        <Paper
+          elevation={4}
           sx={{
-            minHeight: "80vh",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            bgcolor: "background.default",
-            color: "text.primary",
-            px: 2,
+            p: isMobile ? 2 : 4,
+            maxWidth: 420,
+            width: "100%",
+            mt: isMobile ? 6 : 12,
+            mb: 4,
+            bgcolor: "background.paper",
           }}
         >
-          <Typography variant={isMobile ? "h5" : "h4"} gutterBottom>
+          <Typography
+            variant={isMobile ? "h5" : "h4"}
+            gutterBottom
+            align="center"
+          >
             Entre em contato
           </Typography>
           <Box
@@ -49,7 +48,6 @@ export default function ContatoPage() {
               display: "flex",
               flexDirection: "column",
               gap: 2,
-              width: isMobile ? "100%" : 400,
               mt: 2,
             }}
             noValidate
@@ -64,12 +62,11 @@ export default function ContatoPage() {
               multiline
               rows={4}
             />
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" sx={{ mt: 2 }}>
               Enviar
             </Button>
           </Box>
-        </Box>
-        <Footer />
+        </Paper>
       </Box>
     </>
   );

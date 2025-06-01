@@ -2,7 +2,6 @@
 import { useThemeMode } from "../../components/ThemeRegistry";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import NavBar from "../../components/NavBar";
-import Footer from "../../components/Footer";
 import { Typography, Box } from "@mui/material";
 
 export default function SobrePage() {
@@ -33,7 +32,6 @@ export default function SobrePage() {
           Este projeto foi desenvolvido para conectar profissionais e empresas no
           Maranhão, facilitando o acesso a oportunidades de trabalho.
         </Typography>
-        <Footer />
       </Box>
     </>
   );
