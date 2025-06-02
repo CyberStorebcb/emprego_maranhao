@@ -19,8 +19,12 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useState } from "react";
 import Link from "next/link";
+import Box from "@mui/material/Box";
+import { useThemeMode } from "./ThemeRegistry"; // ajuste o caminho se necessário
 
-export default function NavBar({ mode, setMode, isMobile }: { mode: "light" | "dark"; setMode: (m: "light" | "dark") => void; isMobile: boolean }) {
+
+export default function NavBar() {
+  const { mode, setMode } = useThemeMode();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const menuItems = [
@@ -31,43 +35,84 @@ export default function NavBar({ mode, setMode, isMobile }: { mode: "light" | "d
   ];
 
   return (
-    <AppBar position="sticky" color="primary" elevation={2}>
+    <AppBar position="sticky" color="primary" elevation={2} sx={{ mb: 2 }}>
       <Toolbar>
-        {isMobile && (
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={() => setDrawerOpen(true)}
-            sx={{ mr: 2 }}
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+        <IconButton
+          color="inherit"
+          edge="start"
+          onClick={() => setDrawerOpen(true)}
+          sx={{ mr: 2, display: { xs: "flex", md: "none" } }}
+          aria-label="menu"
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography
+          variant="h6"
+          sx={{
+            flexGrow: 1,
+            fontWeight: 800,
+            letterSpacing: "-1px",
+            color: "#fff",
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
           🚀 Empregos Maranhão
         </Typography>
-        {!isMobile &&
-          menuItems.map((item) => (
+        <Box
+          sx={{
+            display: { xs: "none", md: "flex" },
+            gap: 1,
+            alignItems: "center",
+          }}
+        >
+          {menuItems.map((item) => (
             <Button
               key={item.text}
               color="inherit"
               component={Link}
               href={item.href}
               startIcon={item.icon}
+              sx={{
+                fontWeight: 600,
+                fontSize: "1rem",
+                borderRadius: 99,
+                px: 2,
+                textTransform: "none",
+                ":hover": {
+                  background: "rgba(255,255,255,0.08)",
+                  color: "#ff4081",
+                },
+              }}
             >
               {item.text}
             </Button>
           ))}
-        <IconButton
-          sx={{ ml: 1 }}
-          color="inherit"
-          onClick={() => setMode(mode === "light" ? "dark" : "light")}
-          aria-label="Alternar tema"
-        >
-          {mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
-        </IconButton>
+        </Box>
+        <Box sx={{ flexGrow: 0, ml: 2 }}>
+          <Button
+            color="inherit"
+            startIcon={mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+            onClick={() => setMode(mode === "dark" ? "light" : "dark")}
+            sx={{
+              borderRadius: 99,
+              px: 2,
+              fontWeight: 700,
+              textTransform: "none",
+              fontSize: "1rem",
+              ":hover": {
+                background: "rgba(255,255,255,0.08)",
+                color: "#ff4081",
+              },
+            }}
+            aria-label={mode === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+          >
+            {mode === "dark" ? "Modo Claro" : "Modo Escuro"}
+          </Button>
+        </Box>
       </Toolbar>
+      {/* Drawer mobile */}
       <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         <List>
           {menuItems.map((item) => (
@@ -87,3 +132,5 @@ export default function NavBar({ mode, setMode, isMobile }: { mode: "light" | "d
     </AppBar>
   );
 }
+
+<NavBar />

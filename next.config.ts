@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
+const repo = "emprego_maranhao";
 const isProd = process.env.NODE_ENV === "production";
-const repo = 'emprego_maranhao';
 
 const nextConfig = {
-  output: 'export',
-  basePath: isProd ? `/${repo}` : '',
-  assetPrefix: isProd ? `/${repo}/` : '',
+  output: "export", // necessário para next export
+  basePath: isProd ? `/${repo}` : "",
+  assetPrefix: isProd ? `/${repo}/` : "",
 };
 
-module.exports = nextConfig;
+export default nextConfig;

@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo, createContext, useContext } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Geist, Geist_Mono } from "next/font/google";
+// import { ThemeContext } from "./ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
