@@ -101,12 +101,38 @@ const FormularioCandidatura: React.FC<Props> = ({ vaga, onClose }) => {
     setEnviado(true);
     setErro(false);
 
-    // Simulação de envio
-    setTimeout(() => {
+    // Simulação de upload do currículo (ajuste para upload real se quiser)
+    let curriculoUrl = "";
+    if (curriculo) {
+      curriculoUrl = curriculo.name; // ou faça upload e pegue a URL real
+    }
+
+    try {
+      const response = await fetch("http://localhost:4000/candidatos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nome,
+          cpf,
+          nascimento,
+          email,
+          whatsapp,
+          curriculoUrl,
+          vaga: vaga.titulo,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Erro ao enviar dados");
+
+      setTimeout(() => {
+        setEnviado(false);
+        setErro(false);
+        onClose();
+      }, 1500);
+    } catch {
+      setErro(true);
       setEnviado(false);
-      setErro(false);
-      onClose();
-    }, 1500);
+    }
   };
 
   return (
