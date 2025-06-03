@@ -40,3 +40,11 @@ a {
     color-scheme: dark;
   }
 }
+
+@media (max-width: 600px) {
+  .formulario-modal {
+    max-width: 98vw !important;
+    padding: 8px !important;
+    border-radius: 10px !important;
+  }
+}

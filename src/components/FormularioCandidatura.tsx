@@ -11,6 +11,11 @@ type Vaga = {
   salario: number;
   desc: string;
   nova: boolean;
+  requisitos?: string[];
+  atividades?: string[];
+  beneficios?: string[];
+  horario?: string;
+  contratacao?: string;
 };
 
 function formatSalario(valor: number) {
@@ -105,7 +110,21 @@ const FormularioCandidatura: React.FC<Props> = ({ vaga, onClose }) => {
   };
 
   return (
-    <div style={{ background: "#fff", borderRadius: 18, padding: 24, minWidth: 340, maxWidth: 420 }}>
+    <div
+      className="formulario-modal"
+      style={{
+        background: "#fff",
+        borderRadius: 18,
+        padding: 16,
+        width: "100%",
+        maxWidth: 420,
+        minWidth: 0,
+        boxSizing: "border-box",
+        margin: "0 auto",
+        overflowY: "auto",
+        maxHeight: "90vh",
+      }}
+    >
       <button
         onClick={onClose}
         style={{
@@ -137,7 +156,90 @@ const FormularioCandidatura: React.FC<Props> = ({ vaga, onClose }) => {
       <div style={{ textAlign: "center", color: "#388e3c", fontWeight: 600, fontSize: 15, marginBottom: 18 }}>
         Salário: {formatSalario(vaga.salario)}
       </div>
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={{
+  width: "100%",
+  background: "#f5faff",
+  borderRadius: 12,
+  padding: 18,
+  marginBottom: 18,
+  boxShadow: "0 2px 8px rgba(25,118,210,0.07)",
+  border: "1.5px solid #1976d2",
+  boxSizing: "border-box",
+}}>
+  <div style={{ marginBottom: 10 }}>
+    <span style={{ color: "#1976d2", fontWeight: 800, fontSize: 18, display: "block", marginBottom: 6 }}>
+      Requisitos:
+    </span>
+    <ul style={{ margin: 0, paddingLeft: 22, color: "#222", fontSize: 15, fontWeight: 500 }}>
+      {vaga.requisitos?.map((req, idx) => (
+        <li key={idx}>{req}</li>
+      ))}
+    </ul>
+  </div>
+  <div style={{ marginBottom: 10 }}>
+    <span style={{ color: "#1976d2", fontWeight: 800, fontSize: 18, display: "block", marginBottom: 6 }}>
+      O que você irá fazer:
+    </span>
+    <ul style={{ margin: 0, paddingLeft: 22, color: "#222", fontSize: 15, fontWeight: 500 }}>
+      {vaga.atividades?.map((atv, idx) => (
+        <li key={idx}>{atv}</li>
+      ))}
+    </ul>
+  </div>
+  {vaga.beneficios && (
+    <div style={{ marginBottom: 10 }}>
+      <span style={{ color: "#1976d2", fontWeight: 800, fontSize: 18 }}>Benefícios:</span>
+      <span style={{ color: "#222", fontSize: 15, fontWeight: 500, marginLeft: 8 }}>
+        {vaga.beneficios.join(", ")}
+      </span>
+    </div>
+  )}
+  {vaga.horario && (
+    <div style={{ marginBottom: 10 }}>
+      <span style={{ color: "#1976d2", fontWeight: 800, fontSize: 18 }}>Horário:</span>
+      <span style={{ color: "#222", fontSize: 15, fontWeight: 500, marginLeft: 8 }}>
+        {vaga.horario}
+      </span>
+    </div>
+  )}
+  {vaga.contratacao && (
+    <div>
+      <span style={{ color: "#1976d2", fontWeight: 800, fontSize: 18 }}>Tipo de contratação:</span>
+      <span style={{ color: "#222", fontSize: 15, fontWeight: 500, marginLeft: 8 }}>
+        {vaga.contratacao}
+      </span>
+    </div>
+  )}
+</div>
+      <div style={{
+  background: "#f5faff",
+  borderRadius: 12,
+  padding: 16,
+  marginBottom: 18,
+  boxShadow: "0 2px 8px rgba(25,118,210,0.07)",
+  border: "1.5px solid #1976d2",
+}}>
+  <strong style={{ color: "#1976d2", fontSize: 18 }}>Atenção!</strong>
+  <p style={{ color: "#333", fontSize: 15, marginTop: 8, marginBottom: 0 }}>
+    Antes de se candidatar, verifique se seus dados estão corretos e atualizados.
+  </p>
+  <p style={{ color: "#333", fontSize: 15, marginTop: 4, marginBottom: 0 }}>
+    É importante que você tenha mais de 16 anos e que seu CPF seja válido.
+  </p>
+  <p style={{ color: "#333", fontSize: 15, marginTop: 4, marginBottom: 0 }}>
+    Não se esqueça de anexar seu currículo em formato PDF ou DOC/DOCX.
+  </p>
+</div>
+      <form
+  onSubmit={handleSubmit}
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    gap: 16,
+    width: "100%",
+    boxSizing: "border-box",
+  }}
+>
         <input
           type="text"
           placeholder="Nome completo"
@@ -159,10 +261,12 @@ const FormularioCandidatura: React.FC<Props> = ({ vaga, onClose }) => {
           aria-invalid={!!erros.nome}
           aria-describedby={erros.nome ? "erro-nome" : undefined}
           style={{
+            width: "100%",
             padding: 10,
             borderRadius: 8,
             border: `1.5px solid ${erros.nome ? "red" : "#1976d2"}`,
             fontSize: 15,
+            boxSizing: "border-box",
           }}
         />
         {erros.nome && <span id="erro-nome" role="alert" style={{ color: "red", fontSize: 13 }}>{erros.nome}</span>}
@@ -186,22 +290,35 @@ const FormularioCandidatura: React.FC<Props> = ({ vaga, onClose }) => {
         />
         {erros.cpf && <span id="erro-cpf" role="alert" style={{ color: "red", fontSize: 13 }}>{erros.cpf}</span>}
 
-        <input
-          type="date"
-          placeholder="Data de nascimento"
-          value={nascimento}
-          onChange={e => setNascimento(e.target.value)}
-          required
-          aria-invalid={!!erros.nascimento}
-          aria-describedby={erros.nascimento ? "erro-nasc" : undefined}
-          style={{
-            padding: 10,
-            borderRadius: 8,
-            border: `1.5px solid ${erros.nascimento ? "red" : "#1976d2"}`,
-            fontSize: 15,
-          }}
-        />
-        {erros.nascimento && <span id="erro-nasc" style={{ color: "red", fontSize: 13 }}>{erros.nascimento}</span>}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <label htmlFor="nascimento" style={{ fontWeight: 600, color: "#1976d2", marginBottom: 4 }}>
+            Data de nascimento <span style={{ color: "#d32f2f" }}>*</span>
+          </label>
+          <span style={{ fontSize: 13, color: "#555", marginBottom: 4 }}>
+            (Você deve ter pelo menos 16 anos)
+          </span>
+          <input
+            id="nascimento"
+            type="date"
+            placeholder="dd/mm/aaaa"
+            value={nascimento}
+            onChange={e => setNascimento(e.target.value)}
+            required
+            aria-invalid={!!erros.nascimento}
+            aria-describedby={erros.nascimento ? "erro-nasc" : undefined}
+            style={{
+              width: "100%",
+              padding: 10,
+              borderRadius: 8,
+              border: `1.5px solid ${erros.nascimento ? "red" : "#1976d2"}`,
+              fontSize: 15,
+              boxSizing: "border-box",
+            }}
+          />
+          {erros.nascimento && (
+            <span id="erro-nasc" style={{ color: "red", fontSize: 13 }}>{erros.nascimento}</span>
+          )}
+        </div>
 
         <input
           type="email"

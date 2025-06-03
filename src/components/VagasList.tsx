@@ -52,6 +52,23 @@ function gerarVagas(qtd = 500) {
       salario: salarioBase,
       desc: `Atue como ${nivel.toLowerCase()} na área de ${area.toLowerCase()} em ${municipio}.`,
       nova: Math.random() < 0.15,
+      requisitos: [
+        "Ensino médio completo",
+        "Conhecimento em informática",
+        "Boa comunicação"
+      ],
+      atividades: [
+        "Atendimento ao cliente",
+        "Organização de documentos",
+        "Apoio à equipe"
+      ],
+      beneficios: [
+        "Vale Transporte",
+        "Vale Alimentação",
+        "Plano de Saúde"
+      ],
+      horario: "Segunda a sexta, 8h às 18h",
+      contratacao: tipo
     });
   }
   return vagas;
