@@ -20,11 +20,13 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useState } from "react";
 import Link from "next/link";
 import Box from "@mui/material/Box";
-import { useThemeMode } from "./ThemeRegistry"; // ajuste o caminho se necessário
 
+interface NavBarProps {
+  mode: "light" | "dark";
+  setMode: React.Dispatch<React.SetStateAction<"light" | "dark">>;
+}
 
-export default function NavBar() {
-  const { mode, setMode } = useThemeMode();
+const NavBar: React.FC<NavBarProps> = ({ mode, setMode }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const menuItems = [
@@ -131,6 +133,6 @@ export default function NavBar() {
       </Drawer>
     </AppBar>
   );
-}
+};
 
-<NavBar />
+export default NavBar;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "../app/vagas/vagas.module.css";
 import { useThemeMode } from "./ThemeRegistry"; // ajuste o caminho se necessário
+import FormularioCandidatura from "./FormularioCandidatura"; // ajuste o caminho se necessário
 
 const municipios = [
   "São Luís", "Imperatriz", "Timon", "Caxias", "São José de Ribamar", "Codó", "Paço do Lumiar", "Açailândia", "Bacabal", "Balsas",
@@ -56,6 +57,19 @@ function gerarVagas(qtd = 500) {
   return vagas;
 }
 
+
+type Vaga = {
+  id: number;
+  titulo: string;
+  empresa: string;
+  local: string;
+  tipo: string;
+  nivel: string;
+  salario: number;
+  desc: string;
+  nova: boolean;
+};
+
 const vagas = gerarVagas(500);
 
 const tiposFiltro = ["Todos", ...tipos];
@@ -63,7 +77,11 @@ const cidades = ["Todas", ...Array.from(new Set(vagas.map((v) => v.local)))];
 const niveisFiltro = ["Todos", "Básico", "Médio", "Avançado"];
 
 function formatSalario(valor: number) {
-  return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  return valor.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 2,
+  });
 }
 
 export default function VagasList() {
@@ -74,7 +92,9 @@ export default function VagasList() {
   const [cidade, setCidade] = useState("Todas");
   const [nivel, setNivel] = useState("Todos");
   const [ordem, setOrdem] = useState<"desc" | "asc">("desc");
-  const [filtroAberto, setFiltroAberto] = useState(true);
+  const [filtroAberto, setFiltroAberto] = useState(false); // <-- alterado para iniciar fechado
+  const [vagaSelecionada, setVagaSelecionada] = useState<Vaga | null>(null);
+  const [modalAberto, setModalAberto] = useState(false);
 
   const filtrarPorNivel = (vagaNivel: string) => {
     if (nivel === "Todos") return true;
@@ -406,6 +426,10 @@ export default function VagasList() {
                     background: tema === "dark" ? "#1976d2" : "#1976d2",
                     color: "#fff",
                   }}
+                  onClick={() => {
+                    setVagaSelecionada(vaga);
+                    setModalAberto(true);
+                  }}
                 >
                   Candidatar-se
                 </button>
@@ -450,6 +474,34 @@ export default function VagasList() {
       >
         Pressione Tab para navegar entre as vagas.
       </div>
+      {/* Modal de candidatura */}
+      {modalAberto && vagaSelecionada && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.45)",
+            zIndex: 2000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onClick={() => setModalAberto(false)}
+        >
+          <div
+            style={{ zIndex: 2100, minWidth: 340, maxWidth: "95vw" }}
+            onClick={e => e.stopPropagation()}
+          >
+            <FormularioCandidatura
+              vaga={vagaSelecionada}
+              onClose={() => setModalAberto(false)}
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }
