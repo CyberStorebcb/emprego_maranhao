@@ -68,8 +68,7 @@ interface Props {
   onClose: () => void;
 }
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 const FormularioCandidatura: React.FC<Props> = ({ vaga, onClose }) => {
   const [nome, setNome] = useState("");
