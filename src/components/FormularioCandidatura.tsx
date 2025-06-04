@@ -68,6 +68,9 @@ interface Props {
   onClose: () => void;
 }
 
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
 const FormularioCandidatura: React.FC<Props> = ({ vaga, onClose }) => {
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
@@ -108,7 +111,7 @@ const FormularioCandidatura: React.FC<Props> = ({ vaga, onClose }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:4000/candidatos", {
+      const response = await fetch(`${API_URL}/candidatos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

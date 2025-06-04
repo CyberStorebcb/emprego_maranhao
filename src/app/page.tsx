@@ -36,7 +36,7 @@ const vagasDestaque = [
 export default function HomePage() {
 	return (
 		<div className={styles.pageBg}>
-			<NavBar />
+			<NavBar mode="light" setMode={() => {}} />
 			<Box
 				sx={{
 					minHeight: "100vh",

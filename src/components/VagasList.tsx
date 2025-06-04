@@ -42,6 +42,15 @@ function gerarVagas(qtd = 500) {
     if (tipo === "PJ") salarioBase += 1000 + Math.floor(Math.random() * 2000);
     if (tipo === "Temporário") salarioBase -= 300;
 
+    const cargosDestaque = [
+      "Auxiliar Administrativo",
+      "Desenvolvedor",
+      "Diretor",
+      "Analista",
+      "Gerente",
+      "Técnico"
+    ];
+
     vagas.push({
       id: i,
       titulo: `${nivel} de ${area}`,
@@ -52,6 +61,9 @@ function gerarVagas(qtd = 500) {
       salario: salarioBase,
       desc: `Atue como ${nivel.toLowerCase()} na área de ${area.toLowerCase()} em ${municipio}.`,
       nova: Math.random() < 0.15,
+      destaque: cargosDestaque.some(cargo =>
+        `${nivel} de ${area}`.toLowerCase().includes(cargo.toLowerCase())
+      ),
       requisitos: [
         "Ensino médio completo",
         "Conhecimento em informática",
@@ -85,6 +97,7 @@ type Vaga = {
   salario: number;
   desc: string;
   nova: boolean;
+  destaque?: boolean;
 };
 
 const vagas = gerarVagas(500);
@@ -386,8 +399,8 @@ export default function VagasList() {
                 aria-label={`Vaga para ${vaga.titulo} em ${vaga.local}, tipo ${vaga.tipo}, nível ${vaga.nivel}, salário ${formatSalario(
                   vaga.salario
                 )}`}
-                style={
-                  vaga.nova
+                style={{
+                  ...(vaga.nova
                     ? {
                         border: "2px solid #43c6ac",
                         boxShadow: "0 0 0 3px #43c6ac33",
@@ -399,11 +412,35 @@ export default function VagasList() {
                         marginBottom: 8,
                         background: tema === "dark" ? "#232a36" : "#fff",
                         color: tema === "dark" ? "#fff" : "#222",
+                      }),
+                  ...(vaga.destaque
+                    ? {
+                        border: "2.5px solid #f50057",
+                        boxShadow: "0 0 0 4px #f5005733",
+                        background: "#fff8f9",
                       }
-                }
+                    : {}),
+                }}
               >
                 <div className={styles.cardTitle}>
                   {vaga.titulo}
+                  {vaga.destaque && (
+                    <span
+                      style={{
+                        background: "#f50057",
+                        color: "#fff",
+                        fontWeight: 700,
+                        fontSize: 12,
+                        borderRadius: 8,
+                        padding: "2px 8px",
+                        marginLeft: 10,
+                        verticalAlign: "middle",
+                      }}
+                      aria-label="Vaga em destaque"
+                    >
+                      DESTAQUE
+                    </span>
+                  )}
                   {vaga.nova && (
                     <span
                       style={{

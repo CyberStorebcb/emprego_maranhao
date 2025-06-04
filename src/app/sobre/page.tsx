@@ -10,7 +10,7 @@ export default function SobrePage() {
 
   return (
     <>
-      <NavBar mode={mode} setMode={setMode} isMobile={isMobile} />
+      <NavBar mode={mode} setMode={setMode} />
       <Box
         sx={{
           minHeight: "100vh",
